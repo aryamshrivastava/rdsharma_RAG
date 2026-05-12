@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RD Sharma RAG • Step-by-step Math</title>
+  <meta name="description" content="Ask RD Sharma questions and get step-by-step solutions with book context retrieval." />
+  <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <div class="app">
+    <!-- Top Hero / Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">∑</div>
+        <div class="brand-text">
+          <div class="brand-row">
+            <span class="badge">RAG + Vision</span>
+            <span class="badge subtle">RD Sharma</span>
+          </div>
+          <h1>RD Sharma Step-by-step Bot</h1>
+          <p>Upload a question image or type it — get context-grounded, exam-style solutions.</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+  <label class="toggle" title="Explain step-by-step">
+    <input type="checkbox" id="explain" />
+    <span class="toggle-ui" aria-hidden="true"></span>
+    <span class="toggle-text">Step-by-step</span>
+  </label>
+
+  <label class="toggle" title="Show book match quickly, then full steps">
+    <input type="checkbox" id="fastMode" checked />
+    <span class="toggle-ui" aria-hidden="true"></span>
+    <span class="toggle-text">Fast mode</span>
+  </label>
+
+  <button class="btn ghost" id="cancelReq" type="button" title="Cancel request">
+    Cancel
+  </button>
+
+  <button class="btn ghost" id="clearChat" type="button" title="Clear chat">
+    Clear
+  </button>
+</div>
+
+    </header>
+
+    <!-- Main Content -->
+    <main class="shell">
+      <!-- Left info (hidden on small screens) -->
+      <aside class="side">
+        <div class="card">
+          <h3>How it works</h3>
+          <ul class="list">
+            <li><span class="dot"></span> Retrieves RD Sharma context</li>
+            <li><span class="dot"></span> Solves step-by-step</li>
+            <li><span class="dot"></span> Supports images + diagrams</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Try prompts</h3>
+          <div class="chips" id="chips">
+            <button class="chip" type="button">Find x: 2x + 5 = 19</button>
+            <button class="chip" type="button">Factorize: x² - 7x + 12</button>
+            <button class="chip" type="button">Trigonometry: prove an identity</button>
+            <button class="chip" type="button">Coordinate geometry distance formula example</button>
+          </div>
+        </div>
+
+        <div class="mini-note">
+          Tip: Use <kbd>Enter</kbd> to send, <kbd>Shift</kbd>+<kbd>Enter</kbd> for a new line.
+        </div>
+      </aside>
+
+      <!-- Chat Panel -->
+      <section class="panel">
+        <div class="panel-head">
+          <div class="status">
+            <span class="pulse" aria-hidden="true"></span>
+            <span>Online • Local API</span>
+          </div>
+          <div class="meta">
+            <span id="msgCount">0 messages</span>
+          </div>
+        </div>
+
+        <div id="chat" class="chat" aria-live="polite" aria-label="Chat messages">
+          <!-- Empty state -->
+          <div class="empty" id="emptyState">
+            <div class="empty-icon" aria-hidden="true">📘</div>
+            <h2>Ask your first RD Sharma question</h2>
+            <p>Type a question below or upload an image from your book. You’ll get a clear solution with reasoning.</p>
+          </div>
+        </div>
+
+        <div class="composer">
+          <form id="textForm" class="composer-row" autocomplete="off">
+            <div class="field">
+              <textarea id="q" rows="1" placeholder="Type your question… (e.g., Solve: 3x − 7 = 11)" aria-label="Question input"></textarea>
+              <div class="field-hint" id="hint">Be specific: include values, steps asked, or question number.</div>
+            </div>
+
+            <button class="btn primary" type="submit" id="sendBtn">
+              <span class="btn-text">Ask</span>
+              <span class="btn-icon" aria-hidden="true">→</span>
+            </button>
+          </form>
+
+          <!-- Image Upload Section -->
+          <div class="image-input-section">
+            <input type="file" id="img" accept="image/*" style="display: none;" />
+            
+            <!-- Image Preview (Hidden by default) -->
+            <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
+              <div class="image-preview-wrapper">
+                <img id="imagePreview" class="image-preview" alt="Preview" />
+                <button class="image-clear-btn" id="clearImageBtn" type="button" title="Remove image">✕</button>
+              </div>
+              
+              <div class="image-context-form">
+                <textarea 
+                  id="imageContext" 
+                  class="image-context-input" 
+                  placeholder="Add context or question about this image… (optional)"
+                  rows="2"
+                  aria-label="Image context input"
+                ></textarea>
+                
+                <div class="image-form-buttons">
+                  <button class="btn secondary" id="sendImg" type="button">
+                    <span>Analyze Image</span>
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload Button (File picker trigger) -->
+            <div class="uploader" id="uploaderBtn">
+              <button type="button" id="uploadBtn" class="file">
+                <span class="file-icon" aria-hidden="true">🖼️</span>
+                <span class="file-text" id="fileName">Upload question image</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="static/app.js"></script>
+</body>
+</html>
