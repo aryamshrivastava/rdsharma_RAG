@@ -115,13 +115,7 @@
 
 import requests
 from .config import LLM_URL, LLM_MODEL
-
-import requests
-from .config import LLM_URL, LLM_MODEL
 from .geometry import build_geometry_prompt_instruction, detect_geometry_requirement
-
-import requests
-from .config import LLM_URL, LLM_MODEL
 
 SYSTEM = """
 You are an expert Class 9–10 mathematics tutor.

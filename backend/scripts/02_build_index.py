@@ -4,7 +4,7 @@ from pathlib import Path
 import faiss
 from tqdm import tqdm
 
-from rag.config import OCR_DIR
+from rag.config import OCR_DIR, RAW_DIR
 from rag.db import connect, insert_chunk
 from rag.chunker import split_pages_to_chunks, merge_question_with_solution
 from rag.embedder import embed_texts
@@ -34,6 +34,9 @@ def main():
     pages_text = load_pages_text()
     print("Loaded pages:", len(pages_text))
 
+    source_pdf = next(RAW_DIR.glob("*.pdf"), None)
+    source_pdf_name = source_pdf.name if source_pdf else "unknown.pdf"
+
     chunks = split_pages_to_chunks(pages_text)
     chunks = merge_question_with_solution(chunks)
 
@@ -41,15 +44,13 @@ def main():
     con.execute("DELETE FROM chunks;")
     con.commit()
 
-    source_pdf = "RD_Sharma_X.pdf"
-
     print("Writing chunks to SQLite...")
     for c in tqdm(chunks):
         if not c.text.strip():
             continue
         insert_chunk(
             con,
-            source_pdf=source_pdf,
+            source_pdf=source_pdf_name,
             page_start=c.page_start,
             page_end=c.page_end,
             chunk_type=c.chunk_type,

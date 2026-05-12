@@ -18,6 +18,9 @@ rapidfuzz==3.9.6
 tqdm==4.66.5
 
 requests==2.32.3
+redis==5.0.8
+easyocr==1.7.1
+matplotlib==3.9.2
 
 # Mathematical expression formatting
 sympy==1.14.0

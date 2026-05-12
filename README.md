@@ -1,16 +1,60 @@
-# RD Sharma RAG Tutor
+# RD Sharma RAG Tutor 📘
 
-RD Sharma RAG Tutor is a local FastAPI application that answers math questions with retrieval-augmented context from an RD Sharma PDF, optional OCR/Vision fallbacks, and step-by-step solutions in the browser.
+A focused math tutor that turns an RD Sharma book into a searchable, step-by-step assistant. Upload a question, ask from the browser, or send an image and the app retrieves book context, reasons over it, and returns an exam-style solution.
 
-## Features
+> Built for the common case where you want fast explanations from the book, not a generic chatbot answer.
 
-- FastAPI backend with a browser UI.
-- Hybrid retrieval using SQLite metadata, FAISS embeddings, and reranking.
-- OCR ingestion for scanned pages.
-- Image-based question handling and diagram-aware geometry support.
-- Session-style chat in the frontend.
+![FastAPI](https://img.shields.io/badge/FastAPI-0F766E?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![RAG](https://img.shields.io/badge/RAG-111827?style=for-the-badge)
+![OCR](https://img.shields.io/badge/OCR-7C3AED?style=for-the-badge)
+![Vision](https://img.shields.io/badge/Vision-0EA5E9?style=for-the-badge)
 
-## Project Layout
+## Preview 👀
+
+This project is built like a focused study companion: a clean chat interface, book-aware retrieval, image input support, and geometry-friendly output that keeps the answers practical and exam-ready.
+
+## Why It Stands Out ✨
+
+- FastAPI backend with a clean browser UI.
+- Hybrid retrieval across SQLite metadata, FAISS embeddings, and reranking.
+- OCR ingestion for scanned pages and image-based questions.
+- Diagram-aware geometry support for visual math problems.
+- Session-style chat so the conversation feels continuous, not one-off.
+
+## Quick Start 🚀
+
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+Put your source PDF in `backend/data/raw/`, then build the index:
+
+```bash
+python scripts/01_ingest_pdf.py
+python scripts/02_build_index.py
+```
+
+Run the app:
+
+```bash
+uvicorn app:app --reload
+```
+
+Open `http://127.0.0.1:8000` in your browser.
+
+## What It Does 🧠
+
+The app is designed for RD Sharma problem solving with a local-first workflow:
+
+- Reads the source PDF and extracts text where possible.
+- Falls back to OCR when a page is scanned or image-heavy.
+- Builds a searchable chunk store and FAISS index.
+- Retrieves relevant context before generating a final answer.
+- Handles image uploads and geometry-style questions with diagram support.
+
+## Project Structure 🗂️
 
 - `backend/app.py` - FastAPI app and chat endpoints.
 - `backend/rag/` - retrieval, OCR, embedding, reranking, and answer-generation logic.
@@ -19,56 +63,15 @@ RD Sharma RAG Tutor is a local FastAPI application that answers math questions w
 - `templates/index.html` - main UI shell.
 - `static/app.js` and `static/styles.css` - frontend behavior and styling.
 
-## Requirements
+## Requirements ✅
 
 - Python 3.10 or newer.
-- A local RD Sharma PDF for ingestion.
-- Optional but recommended local services/models used by the app, depending on your setup:
+- An RD Sharma PDF placed in `backend/data/raw/`.
+- Optional local services/models depending on your setup:
   - an LLM endpoint such as Ollama
   - a VLM endpoint for image fallback handling
 
-## Setup
-
-1. Create and activate a virtual environment.
-2. Install dependencies:
-
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-3. Put your source PDF in `backend/data/raw/`.
-
-## Ingest and Build the Index
-
-Run the ingestion script first to extract text or OCR pages:
-
-```bash
-cd backend
-python scripts/01_ingest_pdf.py
-```
-
-Then build the chunk database and FAISS index:
-
-```bash
-cd backend
-python scripts/02_build_index.py
-```
-
-By default, generated OCR, database, and FAISS files are written outside the repository under your local app data directory. That keeps the GitHub repo clean and small.
-
-## Run the App
-
-Start the API from the `backend` directory:
-
-```bash
-cd backend
-uvicorn app:app --reload
-```
-
-Then open the browser at `http://127.0.0.1:8000`.
-
-## Configuration
+## Configuration ⚙️
 
 The app can be configured with environment variables or `backend/.env.local`.
 
@@ -82,22 +85,17 @@ Common settings:
 - `REDIS_URL` - session storage backend.
 - `APP_HOST` and `APP_PORT` - local host and port values.
 
-## GitHub Upload
+## GitHub Upload 🌐
 
-This repository is ready to commit after you initialize Git locally. If you want to push it to your GitHub account, create a repository under your profile and add it as the remote, for example:
+This repo is already set up for GitHub. If you need to reconnect it to a fresh remote, use:
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/aryamshrivastava/<repo-name>.git
+git remote add origin https://github.com/aryamshrivastava/rdsharma_RAG.git
 git push -u origin main
 ```
 
-Replace `<repo-name>` with the GitHub repository you create.
-
-## Notes
+## Notes 📝
 
 - Do not commit the source PDF, OCR output, FAISS index, or local environment files.
-- The `.gitignore` in this repo already excludes those generated and machine-specific files.
+- The `.gitignore` already excludes those generated and machine-specific files.
